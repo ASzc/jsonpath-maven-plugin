@@ -75,3 +75,13 @@ This example uses the `modify` goal to change the version of a NPM `package.json
     </build>
 </project>
 ```
+
+## Changelog
+
+### 1.1.0
+
+Support for indefinite paths in `set-properties` (Thanks @dpwrussell).
+
+### 1.0.0
+
+Initial release, with `set-properties` and `modify` goals.
