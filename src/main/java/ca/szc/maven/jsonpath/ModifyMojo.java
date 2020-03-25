@@ -15,6 +15,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jayway.jsonpath.Configuration;
@@ -31,6 +33,9 @@ public class ModifyMojo extends AbstractMojo
 
     @Parameter(property = "jsonpath.outputFile", required = false)
     private String outputFile;
+
+    @Parameter(property = "jsonpath.formatter", defaultValue = "conventional", required = false)
+    private String formatter;
 
     @Parameter(required = true)
     private List<ModifyMojoModifications> modifications;
@@ -70,7 +75,16 @@ public class ModifyMojo extends AbstractMojo
 
         try (OutputStream out = Files.newOutputStream(outputJson))
         {
-            ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+            PrettyPrinter prettyPrinter;
+            if ("conventional".equals(formatter)) {
+                prettyPrinter = new ConventionalPrettyPrinter();
+            } else if ("jackson".equals(formatter)) {
+                prettyPrinter = new DefaultPrettyPrinter();
+            } else {
+                getLog().error("Invalid JSON formatter specified");
+                throw new MojoExecutionException("Unknown formatter '" + formatter + "'");
+            }
+            ObjectWriter writer = new ObjectMapper().writer(prettyPrinter);
             writer.writeValue(out, json.json());
         }
         catch (IOException e)

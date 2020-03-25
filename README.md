@@ -17,7 +17,7 @@ This example uses the `set-properties` goal to set some maven properties from th
             <plugin>
                 <groupId>ca.szc.maven</groupId>
                 <artifactId>jsonpath-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.2.0</version>
                 <executions>
                     <execution>
                         <id>read-devdependencies</id>
@@ -51,7 +51,7 @@ This example uses the `modify` goal to change the version of a NPM `package.json
             <plugin>
                 <groupId>ca.szc.maven</groupId>
                 <artifactId>jsonpath-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.2.0</version>
                 <executions>
                     <execution>
                         <id>update-version</id>
@@ -61,6 +61,7 @@ This example uses the `modify` goal to change the version of a NPM `package.json
                         </goals>
                         <configuration>
                             <file>${project.build.directory}/package.json</file>
+                            <formatter>conventional</formatter>
                             <modifications>
                                 <modification>
                                     <expression>$.version</expression>
@@ -77,6 +78,10 @@ This example uses the `modify` goal to change the version of a NPM `package.json
 ```
 
 ## Changelog
+
+### 1.2.0
+
+Change default pretty printer for `modify` goal, such that it returns output that is more conventional. Specify `<formatter>jackson</formatter>` for jackson's default formatter.
 
 ### 1.1.0
 
